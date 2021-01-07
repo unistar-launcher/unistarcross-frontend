@@ -12,6 +12,14 @@ import BSCfarming from './BSCfarming'
 import HTfarming from './HTfarming'
 import BSCfarming2 from './BSCfarming2'
 
+function testData(){
+  var network = web3.version.network;
+  console.log(network);
+
+}
+
+testData();
+
 export default function Farm() {
   return (
     <>

@@ -28,12 +28,21 @@ const tabOrder = [
     className: '',
   },
   {
+    path: '/presale',
+    textKey: 'Presale',
+    icon: require('../../assets/images/icon/revert.svg'),
+    iconActive: require('../../assets/images/icon/revert-purpl.svg'),
+    regex: /\/presale|\/sale/,
+  },
+  {
     path: '/swap',
     textKey: 'swap',
     icon: require('../../assets/images/icon/swap.svg'),
     iconActive: require('../../assets/images/icon/swap-purpl.svg'),
     regex: /\/swap/,
   },
+
+  
   // {
   //   path: '/send',
   //   textKey: 'send',
@@ -72,38 +81,38 @@ const tabOrder = [
 ]
 
 const tabOrder2 = [
-  {
-    path: config.marketsUrl,
-    textKey: 'Markets',
-    icon: require('../../assets/images/icon/markets.svg'),
-    iconActive: require('../../assets/images/icon/markets-purpl.svg'),
-    regex: /\/markets/,
-    className: 'otherInfo'
-  },
-  {
-    path: 'https://vote.anyswap.exchange/',
-    textKey: 'ANYToken',
-    icon: require('../../assets/images/icon/any.svg'),
-    iconActive: require('../../assets/images/icon/any-purpl.svg'),
-    regex: /\/anyToken/,
-    className: 'otherInfo'
-  },
-  {
-    path: 'https://anyswap.net/',
-    textKey: 'Network',
-    icon: require('../../assets/images/icon/network.svg'),
-    iconActive: require('../../assets/images/icon/network-purpl.svg'),
-    regex: /\/network/,
-    className: 'otherInfo'
-  },
-  {
-    path: config.document,
-    textKey: 'Documents',
-    icon: require('../../assets/images/icon/documents.svg'),
-    iconActive: require('../../assets/images/icon/documents-purpl.svg'),
-    regex: /\/documents/,
-    className: 'otherInfo noBB'
-  },
+  // {
+  //   path: config.marketsUrl,
+  //   textKey: 'Markets',
+  //   icon: require('../../assets/images/icon/markets.svg'),
+  //   iconActive: require('../../assets/images/icon/markets-purpl.svg'),
+  //   regex: /\/markets/,
+  //   className: 'otherInfo'
+  // },
+  // {
+  //   path: 'https://vote.anyswap.exchange/',
+  //   textKey: 'ANYToken',
+  //   icon: require('../../assets/images/icon/any.svg'),
+  //   iconActive: require('../../assets/images/icon/any-purpl.svg'),
+  //   regex: /\/anyToken/,
+  //   className: 'otherInfo'
+  // },
+  // {
+  //   path: 'https://anyswap.net/',
+  //   textKey: 'Network',
+  //   icon: require('../../assets/images/icon/network.svg'),
+  //   iconActive: require('../../assets/images/icon/network-purpl.svg'),
+  //   regex: /\/network/,
+  //   className: 'otherInfo'
+  // },
+  // {
+  //   path: config.document,
+  //   textKey: 'Documents',
+  //   icon: require('../../assets/images/icon/documents.svg'),
+  //   iconActive: require('../../assets/images/icon/documents-purpl.svg'),
+  //   regex: /\/documents/,
+  //   className: 'otherInfo noBB'
+  // },
 ]
 
 
@@ -401,18 +410,18 @@ function NavigationTabs({ location: { pathname }, history }) {
           )
         })}
       </Tabs>
-      <Tabs2>
+      {/* <Tabs2>
         {tabOrder2.map(({ path, textKey, regex, icon, iconActive, className }, index) => (
           <OutLinkHref key={index} href={path} className={className ? className : ''} onMouseEnter={() => {toggleHover(textKey)}} onMouseLeave={() => {toggleHover('')}}>
             <div className={'icon'}>
-              {/* <img src={pathname.match(regex) || navHover === textKey ? iconActive : icon}/> */}
+              { <img src={pathname.match(regex) || navHover === textKey ? iconActive : icon}/> }
               <img alt={''} src={iconActive} className={pathname.match(regex) || navHover === textKey ? '' : 'show'}/>
               <img alt={''} src={icon} className={pathname.match(regex) || navHover === textKey ? 'show' : ''}/>
             </div>
             {t(textKey)}
           </OutLinkHref>
         ))}
-      </Tabs2>
+      </Tabs2> */}
       <OutLink>
         <OutLinkImgBox>
           <Link id="link" href="https://t.me/anyswap">

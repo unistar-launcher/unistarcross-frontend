@@ -17,7 +17,7 @@ import { useAddressAllowance } from '../../contexts/Allowances'
 import { useWalletModalToggle } from '../../contexts/Application'
 
 import { Button } from '../../theme'
-import CurrencyInputPanel from '../CurrencyInputPanel'
+ import CurrencyInputPanel from './CurrencyInputPanel'
 import AddressInputPanel from '../AddressInputPanel'
 import OversizedPanel from '../OversizedPanel'
 import TransactionDetails from '../TransactionDetails'
@@ -297,7 +297,8 @@ function swapStateReducer(state, action) {
     case 'SELECT_CURRENCY': {
       const { inputCurrency, outputCurrency } = state
       const { field, currency } = action.payload
-
+      console.log('state',state)
+      console.log('action.payload',action)
       const newInputCurrency = field === INPUT ? currency : inputCurrency
       const newOutputCurrency = field === OUTPUT ? currency : outputCurrency
 
@@ -458,14 +459,14 @@ export default function ExchangePage({ initialCurrency, params }) {
     {
       initialCurrency: initialCurrency,
       inputCurrencyURL: params.inputCurrency,
-      outputCurrencyURL: params.outputCurrency || params.tokenAddress,
+      outputCurrencyURL: params.tokenOutput,//params.outputCurrency || params.tokenAddress,
       exactFieldURL: params.exactField,
       exactAmountURL: params.exactAmount
     },
     getInitialSwapState
   )
 
-  console.log(swapState);
+  console.log('swapState',swapState);
 
   const { independentValue, dependentValue, independentField, inputCurrency, outputCurrency } = swapState
 
@@ -773,7 +774,7 @@ export default function ExchangePage({ initialCurrency, params }) {
     let estimate, method, args, value
     let txnsType = sending ? 'SEND' : 'SWAP'
 
-    
+    //Exchange presale
     // if (config.supportWallet.includes(walletType)) {
     if (config.supportWallet.includes(walletType)) {
       setIsHardwareError(false)
@@ -1108,15 +1109,16 @@ export default function ExchangePage({ initialCurrency, params }) {
             },
             iconUrl: require('../../assets/images/icon/swap.svg'),
             iconActiveUrl: require('../../assets/images/icon/swap-white.svg')
-          },
-          {
-            name: t('send'),
-            onTabClick: name => {
-              setSending(true)
-            },
-            iconUrl: require('../../assets/images/icon/send.svg'),
-            iconActiveUrl: require('../../assets/images/icon/send-white.svg')
           }
+          // ,
+          // {
+          //   name: t('send'),
+          //   onTabClick: name => {
+          //     setSending(true)
+          //   },
+          //   iconUrl: require('../../assets/images/icon/send.svg'),
+          //   iconActiveUrl: require('../../assets/images/icon/send-white.svg')
+          // }
         ]}
       ></Title>
       <CurrencyInputPanel
@@ -1151,6 +1153,7 @@ export default function ExchangePage({ initialCurrency, params }) {
           })
         }}
         showUnlock={showUnlock}
+        disableTokenSelect = {true}
         selectedTokens={[inputCurrency, outputCurrency]}
         selectedTokenAddress={inputCurrency}
         value={inputValueFormatted}
@@ -1169,14 +1172,15 @@ export default function ExchangePage({ initialCurrency, params }) {
           <img src={ResertSvg} />
           </DownArrow>
         </DownArrowBackground> */}
-        <DownArrowBackground  onClick={() => {
+        {/* <DownArrowBackground  onClick={() => {
           dispatchSwapState({ type: 'FLIP_INDEPENDENT' })
         }}>
           <img src={ResertSvg} alt={''} />
-        </DownArrowBackground>
+        </DownArrowBackground> */}
       </OversizedPanel>
       <CurrencyInputPanel
         title={t('output')}
+        disableTokenSelect = {true}
         description={outputValueFormatted && independentField === INPUT ? estimatedText : ''}
         extraText={outputBalanceFormatted && formatBalance(outputBalanceFormatted)}
         urlAddedTokens={urlAddedTokens}
@@ -1287,7 +1291,7 @@ export default function ExchangePage({ initialCurrency, params }) {
               )
             }
             {brokenTokenWarning
-              ? 'Swap'
+              ? 'Buy'
               : !account
               ? t('connectToWallet')
               : sending
@@ -1296,7 +1300,7 @@ export default function ExchangePage({ initialCurrency, params }) {
                 : t('send')
               : highSlippageWarning || customSlippageError === 'warning'
               ? t('swapAnyway')
-              : t('swap')}
+              : t('Buy')}
           </Button>
         </Flex>
       ) : (

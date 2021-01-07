@@ -17,6 +17,7 @@ import Swap from'./Swap'
 import Send from'./Send'
 import Pool from'./Pool'
 import Farms from'./Farms'
+import Presale from'./Presale'
 import FarmsList from'./Farms/FarmsList'
 import Bridge from'./Bridge'
 import Dashboard from'./Dashboard'
@@ -211,6 +212,14 @@ export default function App() {
                             config.farmUrl + 'bscfarming2/:lpToken?',
                           ]}
                           component={() => <Farms params={params} />}
+                        />
+                        <Route
+                          path={[
+                            '/presale',
+                            '/presale/sale',
+                            '/presale/sale/:lpToken?',
+                          ]}
+                          component={() => <Presale params={params} />}
                         />
                         <Redirect to="/dashboard" />
                       </Switch>
