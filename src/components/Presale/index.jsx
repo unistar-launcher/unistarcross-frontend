@@ -251,17 +251,17 @@ function getSwapType(inputCurrency, outputCurrency) {
 
 // this mocks the getInputPrice function, and calculates the required output
 function calculateEtherTokenOutputFromInput(inputAmount, inputReserve, outputReserve) {
-  const inputAmountWithFee = inputAmount.mul(ethers.utils.bigNumberify(997))
-  const numerator = inputAmountWithFee.mul(outputReserve)
-  const denominator = inputReserve.mul(ethers.utils.bigNumberify(1000)).add(inputAmountWithFee)
-  return numerator.div(denominator)
+  var presaleRate = getExchangeRate();
+  console.log(presaleRate);
+  const result = inputAmount.div(ethers.utils.bigNumberify(presaleRate));
+  return result;
 }
 
 // this mocks the getOutputPrice function, and calculates the required input
 function calculateEtherTokenInputFromOutput(outputAmount, inputReserve, outputReserve) {
-  const numerator = inputReserve.mul(outputAmount).mul(ethers.utils.bigNumberify(1000))
-  const denominator = outputReserve.sub(outputAmount).mul(ethers.utils.bigNumberify(997))
-  return numerator.div(denominator).add(ethers.constants.One)
+  var presaleRate = getExchangeRate();
+  const result = outputAmount.mul(ethers.utils.bigNumberify(presaleRate));
+  return result;
 }
 
 function getInitialSwapState(state) {
@@ -297,8 +297,6 @@ function swapStateReducer(state, action) {
     case 'SELECT_CURRENCY': {
       const { inputCurrency, outputCurrency } = state
       const { field, currency } = action.payload
-      console.log('state',state)
-      console.log('action.payload',action)
       const newInputCurrency = field === INPUT ? currency : inputCurrency
       const newOutputCurrency = field === OUTPUT ? currency : outputCurrency
 
@@ -338,33 +336,10 @@ function swapStateReducer(state, action) {
   }
 }
 
-function getExchangeRate(inputValue, inputDecimals, outputValue, outputDecimals, invert = false) {
+function getExchangeRate() {
   try {
-    if (
-      inputValue &&
-      (inputDecimals || inputDecimals === 0) &&
-      outputValue &&
-      (outputDecimals || outputDecimals === 0)
-    ) {
-      const factor = ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(18))
-      // console.log(invert)
-      // console.log(factor)
-      // console.log(inputValue)
-      // console.log(outputValue)
-      if (invert) {
-        return inputValue
-          .mul(factor)
-          .mul(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(outputDecimals)))
-          .div(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(inputDecimals)))
-          .div(outputValue)
-      } else {
-        return outputValue
-          .mul(factor)
-          .mul(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(inputDecimals)))
-          .div(ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(outputDecimals)))
-          .div(inputValue)
-      }
-    }
+      var presaleRate = web3Contract.methods.getPresaleRate().encodeABI();
+      return presaleRate;
   } catch {}
 }
 
@@ -378,18 +353,7 @@ function getMarketRate(
   outputDecimals,
   invert = false
 ) {
-  if (swapType === ETH_TO_TOKEN) {
-    return getExchangeRate(outputReserveETH, 18, outputReserveToken, outputDecimals, invert)
-  } else if (swapType === TOKEN_TO_ETH) {
-    return getExchangeRate(inputReserveToken, inputDecimals, inputReserveETH, 18, invert)
-  } else if (swapType === TOKEN_TO_TOKEN) {
-    const factor = ethers.utils.bigNumberify(10).pow(ethers.utils.bigNumberify(18))
-    const firstRate = getExchangeRate(inputReserveToken, inputDecimals, inputReserveETH, 18)
-    const secondRate = getExchangeRate(outputReserveETH, 18, outputReserveToken, outputDecimals)
-    try {
-      return !!(firstRate && secondRate) ? firstRate.mul(secondRate).div(factor) : undefined
-    } catch {}
-  }
+  return getExchangeRate()
 }
 
 // export default function ExchangePage({ initialCurrency, sending = false, params }) {
@@ -414,7 +378,6 @@ export default function ExchangePage({ initialCurrency, params }) {
   if (isAddress(initialCurrency)) {
     urlAddedTokens[initialCurrency] = true
   }
-  // console.log(urlAddedTokens)
 
   const addTransaction = useTransactionAdder()
 
@@ -465,9 +428,6 @@ export default function ExchangePage({ initialCurrency, params }) {
     },
     getInitialSwapState
   )
-
-  console.log('swapState',swapState);
-
   const { independentValue, dependentValue, independentField, inputCurrency, outputCurrency } = swapState
 
   useEffect(() => {
@@ -540,11 +500,7 @@ export default function ExchangePage({ initialCurrency, params }) {
   } else {
     outputValueFormatted *= 1 - 0.001
     outputValueFormatted = Number(outputValueFormatted.toFixed(dependentDecimals)) ? Number(outputValueFormatted.toFixed(Math.min(8, dependentDecimals))) : ''
-    // console.log(outputValueFormatted)
-    // outputValueFormatted = outputValueFormatted ? ethers.utils.bigNumberify(outputValueFormatted).toString() : ''
-  }
-  // console.log(ethers.utils.bigNumberify(''))
-  // validate + parse independent value
+   }
   const [independentError, setIndependentError] = useState()
   useEffect(() => {
     if (independentValue && (independentDecimals || independentDecimals === 0)) {
@@ -723,8 +679,8 @@ export default function ExchangePage({ initialCurrency, params }) {
   // }, [])
 
   const [inverted, setInverted] = useState(false)
-  const exchangeRate = getExchangeRate(inputValueParsed, inputDecimals, outputValueParsed, outputDecimals)
-  const exchangeRateInverted = getExchangeRate(inputValueParsed, inputDecimals, outputValueParsed, outputDecimals, true)
+  const exchangeRate = getExchangeRate()
+  //const exchangeRateInverted = getExchangeRate(inputValueParsed, inputDecimals, outputValueParsed, outputDecimals, true)
 
   const marketRate = getMarketRate(
     swapType,
@@ -1222,19 +1178,11 @@ export default function ExchangePage({ initialCurrency, params }) {
           }}
         >
           <ExchangeRate>{t('exchangeRate')}：</ExchangeRate>
-          {inverted ? (
-            <span>
+          <span>
               {exchangeRate
                 ? `1 ${inputSymbol} = ${amountFormatter(exchangeRate, 18, 6, false)} ${outputSymbol}`
                 : ' - '}
             </span>
-          ) : (
-            <span>
-              {exchangeRate
-                ? `1 ${outputSymbol} = ${amountFormatter(exchangeRateInverted, 18, 6, false)} ${inputSymbol}`
-                : ' - '}
-            </span>
-          )}
         </ExchangeRateWrapper>
       </ExchangeRateWrapperBox>
       {isViewTxnsDtil ? (

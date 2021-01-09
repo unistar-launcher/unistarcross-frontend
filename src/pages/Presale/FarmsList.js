@@ -511,6 +511,39 @@ export default function FarmsList () {
             </div>
           </StyledNavLink>
         </FarmList>
+        <FarmList>
+          <StyledNavLink to={'/presale/sale?token='+ tokenSailorMoon}>
+            <div className='default'>
+              <div className='img'><img src={require('../../assets/images/icon/cycIcon.svg')} alt=""/></div>
+              <div className='info'>
+                <h3>Sailor Moon</h3>
+                <p>{t('BSCStakingTip')}<span className='pecent'>+{BSCStakingAPY ? (Number(BSCStakingAPY)).toFixed(2) : '0.00'}%</span></p>
+              </div>
+            </div>
+          </StyledNavLink>
+        </FarmList>
+        <FarmList>
+          <StyledNavLink to={'/presale/sale?token='+ tokenSailorMoon}>
+            <div className='default'>
+              <div className='img'><img src={require('../../assets/images/icon/cycIcon.svg')} alt=""/></div>
+              <div className='info'>
+                <h3>Sailor Moon</h3>
+                <p>{t('BSCStakingTip')}<span className='pecent'>+{BSCStakingAPY ? (Number(BSCStakingAPY)).toFixed(2) : '0.00'}%</span></p>
+              </div>
+            </div>
+          </StyledNavLink>
+        </FarmList>
+        <FarmList>
+          <StyledNavLink to={'/presale/sale?token='+ tokenSailorMoon}>
+            <div className='default'>
+              <div className='img'><img src={require('../../assets/images/icon/cycIcon.svg')} alt=""/></div>
+              <div className='info'>
+                <h3>Sailor Moon</h3>
+                <p>{t('BSCStakingTip')}<span className='pecent'>+{BSCStakingAPY ? (Number(BSCStakingAPY)).toFixed(2) : '0.00'}%</span></p>
+              </div>
+            </div>
+          </StyledNavLink>
+        </FarmList>
     </FarmListBox>
     </>
   )
