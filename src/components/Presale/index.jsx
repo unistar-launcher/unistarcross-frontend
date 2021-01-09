@@ -23,7 +23,7 @@ import WarningCard from '../WarningCard'
 import config from '../../config'
 
 import {getWeb3ConTract, getWeb3BaseInfo} from '../../utils/web3/txns'
-import EXCHANGE_ABI from '../../constants/abis/exchange'
+import PRESALE_ABI from '../../constants/abis/presale'
 
 import HardwareTip from '../HardwareTip'
 
@@ -104,7 +104,7 @@ margin-top:0.625rem;
 
 const ExchangeRateWrapper = styled.div`
 ${({ theme }) => theme.FlexEC};
-  width: 70%;
+  width: 100%;
   font-family: 'Manrope';
   font-size: 0.75rem;
   font-weight: normal;
@@ -659,15 +659,9 @@ export default function ExchangePage({ initialCurrency, params }) {
     t
   ])
 
-  // useEffect(() => {
-  //   const history = createBrowserHistory()
-  //   history.push(window.location.pathname + '')
-  // }, [])
-
   const [inverted, setInverted] = useState(false)
   const exchangeRate = getExchangeRate()
-  //const exchangeRateInverted = getExchangeRate(inputValueParsed, inputDecimals, outputValueParsed, outputDecimals, true)
-
+ 
   const marketRate = getMarketRate(
     swapType,
     inputReserveETH,
@@ -694,10 +688,8 @@ export default function ExchangePage({ initialCurrency, params }) {
     percentSlippage.lt(ethers.utils.parseEther('.2')) // [5% - 20%)
   const highSlippageWarning = percentSlippage && percentSlippage.gte(ethers.utils.parseEther('.2')) // [20+%
 
-  const isValid = sending
-    ? exchangeRate && inputError === null && independentError === null && recipientError === null && deadlineFromNow
-    : exchangeRate && inputError === null && independentError === null && deadlineFromNow
-
+  const isValid =  exchangeRate && inputError === null && independentError === null && deadlineFromNow
+  
   const estimatedText = `(${t('estimated')})`
   function formatBalance(value) {
     return `Balance: ${value}`
@@ -716,93 +708,17 @@ export default function ExchangePage({ initialCurrency, params }) {
     let estimate, method, args, value
     let txnsType = sending ? 'SEND' : 'SWAP'
 
-    //Exchange presale
-    // if (config.supportWallet.includes(walletType)) {
     if (config.supportWallet.includes(walletType)) {
       setIsHardwareError(false)
       setIsHardwareTip(true)
       setHardwareTxnsInfo(inputValueFormatted + inputSymbol)
       let contractAddress = swapType === ETH_TO_TOKEN ? outputExchangeAddress : inputExchangeAddress
-      let web3Contract = getWeb3ConTract(EXCHANGE_ABI, contractAddress)
-      let data = ''
-      if (independentField === INPUT) {
-  
-        if (swapType === ETH_TO_TOKEN) {
-          value = independentValueParsed
-          data = sending ? 
-          // web3Contract.ethToTokenTransferInput.getData(dependentValueMinumum.toHexString(), deadline, recipient.address)
-          web3Contract.methods.ethToTokenTransferInput(dependentValueMinumum.toHexString(), deadline, recipient.address).encodeABI()
-          :
-          // web3Contract.ethToTokenSwapInput.getData(dependentValueMinumum.toHexString(), deadline)
-          web3Contract.methods.ethToTokenSwapInput(dependentValueMinumum.toHexString(), deadline).encodeABI()
-        } else if (swapType === TOKEN_TO_ETH) {
-          value = ethers.constants.Zero
-          data = sending ? 
-                    // web3Contract.tokenToEthTransferInput.getData(independentValueParsed.toString(), dependentValueMinumum.toString(), deadline, recipient.address) 
-                    web3Contract.methods.tokenToEthTransferInput(independentValueParsed.toString(), dependentValueMinumum.toString(), deadline, recipient.address).encodeABI()
-                    : 
-                    // web3Contract.tokenToEthSwapInput.getData(independentValueParsed.toString(), dependentValueMinumum.toString(), deadline)
-                    web3Contract.methods.tokenToEthSwapInput(independentValueParsed.toString(), dependentValueMinumum.toString(), deadline).encodeABI()
-        } else if (swapType === TOKEN_TO_TOKEN) {
-          value = ethers.constants.Zero
-          data = sending ?
-                  // web3Contract.tokenToTokenTransferInput.getData(
-                  // independentValueParsed.toHexString(),
-                  // dependentValueMinumum.toHexString(),
-                  // ethers.constants.One.toHexString(),
-                  // deadline,
-                  // recipient.address,
-                  // outputCurrency)
-                  web3Contract.methods.tokenToTokenTransferInput(
-                    independentValueParsed.toHexString(),
-                    dependentValueMinumum.toHexString(),
-                    ethers.constants.One.toHexString(),
-                    deadline,
-                    recipient.address,
-                    outputCurrency).encodeABI()
-                  :
-                  // web3Contract.tokenToTokenSwapInput.getData(independentValueParsed.toHexString(), dependentValueMinumum.toHexString(), ethers.constants.One.toHexString(), deadline, outputCurrency)
-                  web3Contract.methods.tokenToTokenSwapInput(independentValueParsed.toHexString(), dependentValueMinumum.toHexString(), ethers.constants.One.toHexString(), deadline, outputCurrency).encodeABI()
-        }
-      } else if (independentField === OUTPUT) {
-  
-        if (swapType === ETH_TO_TOKEN) {
-          value = dependentValueMaximum
-          data = sending ?
-            // web3Contract.ethToTokenTransferOutput.getData(independentValueParsed.toHexString(), deadline, recipient.address)
-            web3Contract.methods.ethToTokenTransferOutput(independentValueParsed.toHexString(), deadline, recipient.address).encodeABI()
-            :
-            web3Contract.methods.ethToTokenSwapOutput(independentValueParsed.toHexString(), deadline).encodeABI()
-        } else if (swapType === TOKEN_TO_ETH) {
-          value = ethers.constants.Zero
-          data = sending ?
-            // web3Contract.tokenToEthTransferOutput.getData(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), deadline, recipient.address)
-            web3Contract.methods.tokenToEthTransferOutput(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), deadline, recipient.address).encodeABI()
-            : 
-            // web3Contract.tokenToEthSwapOutput.getData(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), deadline)
-            web3Contract.methods.tokenToEthSwapOutput(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), deadline).encodeABI()
-        } else if (swapType === TOKEN_TO_TOKEN) {
-          value = ethers.constants.Zero
-          data = sending ?
-          web3Contract.methods.tokenToTokenTransferOutput(
-                independentValueParsed.toHexString(),
-                dependentValueMaximum.toHexString(),
-                ethers.constants.MaxUint256.toHexString(),
-                deadline,
-                recipient.address,
-                outputCurrency
-          ).encodeABI()
-          :
-          // web3Contract.tokenToTokenSwapOutput.getData(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), ethers.constants.MaxUint256.toHexString(), deadline, outputCurrency)
-          web3Contract.methods.tokenToTokenSwapOutput(independentValueParsed.toHexString(), dependentValueMaximum.toHexString(), ethers.constants.MaxUint256.toHexString(), deadline, outputCurrency).encodeABI()
-        }
-      }
-      // console.log(data)
+      let web3Contract = getWeb3ConTract(PRESALE_ABI, contractAddress)
+      let data =  web3Contract.methods.presale(independentValueParsed.toHexString()).encodeABI();
+    
       value = swapType === ETH_TO_TOKEN ? value.toHexString() : 0
-      // console.log(value)
       
       getWeb3BaseInfo(contractAddress, data, account, value).then(res => {
-        // console.log(res)
         if (res.msg === 'Success') {
           addTransaction(res.info)
           recordTxns(res.info, txnsType, inputSymbol + '/' + outputSymbol, account, recipient.address)
@@ -822,68 +738,6 @@ export default function ExchangePage({ initialCurrency, params }) {
       })
       return
     }
-
-    if (independentField === INPUT) {
-
-      if (swapType === ETH_TO_TOKEN) {
-        estimate = sending ? contract.estimate.ethToTokenTransferInput : contract.estimate.ethToTokenSwapInput
-        method = sending ? contract.ethToTokenTransferInput : contract.ethToTokenSwapInput
-        args = sending ? [dependentValueMinumum, deadline, recipient.address] : [dependentValueMinumum, deadline]
-        value = independentValueParsed
-      } else if (swapType === TOKEN_TO_ETH) {
-        estimate = sending ? contract.estimate.tokenToEthTransferInput : contract.estimate.tokenToEthSwapInput
-        method = sending ? contract.tokenToEthTransferInput : contract.tokenToEthSwapInput
-        args = sending
-          ? [independentValueParsed, dependentValueMinumum, deadline, recipient.address]
-          : [independentValueParsed, dependentValueMinumum, deadline]
-        value = ethers.constants.Zero
-        
-      } else if (swapType === TOKEN_TO_TOKEN) {
-        estimate = sending ? contract.estimate.tokenToTokenTransferInput : contract.estimate.tokenToTokenSwapInput
-        method = sending ? contract.tokenToTokenTransferInput : contract.tokenToTokenSwapInput
-        args = sending
-          ? [
-              independentValueParsed,
-              dependentValueMinumum,
-              ethers.constants.One,
-              deadline,
-              recipient.address,
-              outputCurrency
-            ]
-          : [independentValueParsed, dependentValueMinumum, ethers.constants.One, deadline, outputCurrency]
-        value = ethers.constants.Zero
-      }
-    } else if (independentField === OUTPUT) {
-
-      if (swapType === ETH_TO_TOKEN) {
-        estimate = sending ? contract.estimate.ethToTokenTransferOutput : contract.estimate.ethToTokenSwapOutput
-        method = sending ? contract.ethToTokenTransferOutput : contract.ethToTokenSwapOutput
-        args = sending ? [independentValueParsed, deadline, recipient.address] : [independentValueParsed, deadline]
-        value = dependentValueMaximum
-      } else if (swapType === TOKEN_TO_ETH) {
-        estimate = sending ? contract.estimate.tokenToEthTransferOutput : contract.estimate.tokenToEthSwapOutput
-        method = sending ? contract.tokenToEthTransferOutput : contract.tokenToEthSwapOutput
-        args = sending
-          ? [independentValueParsed, dependentValueMaximum, deadline, recipient.address]
-          : [independentValueParsed, dependentValueMaximum, deadline]
-        value = ethers.constants.Zero
-      } else if (swapType === TOKEN_TO_TOKEN) {
-        estimate = sending ? contract.estimate.tokenToTokenTransferOutput : contract.estimate.tokenToTokenSwapOutput
-        method = sending ? contract.tokenToTokenTransferOutput : contract.tokenToTokenSwapOutput
-        args = sending
-          ? [
-              independentValueParsed,
-              dependentValueMaximum,
-              ethers.constants.MaxUint256,
-              deadline,
-              recipient.address,
-              outputCurrency
-            ]
-          : [independentValueParsed, dependentValueMaximum, ethers.constants.MaxUint256, deadline, outputCurrency]
-        value = ethers.constants.Zero
-      }
-    }
-    
     const estimatedGasLimit = await estimate(...args, { value })
     method(...args, {
       value,
@@ -940,77 +794,6 @@ export default function ExchangePage({ initialCurrency, params }) {
   }, [newOutputDetected, setShowOutputWarning])
 
   const [isViewTxnsDtil, setIsViewTxnsDtil] = useState(false)
-  function txnsInfoTaggle () {
-    let contextualInfo = ''
-    let isError = false
-    if (brokenTokenWarning) {
-      contextualInfo = t('brokenToken')
-      isError = true
-    } else if (inputError || independentError) {
-      contextualInfo = inputError || independentError
-      isError = true
-    } else if (!inputCurrency || !outputCurrency) {
-      contextualInfo = t('selectTokenCont')
-    } else if (!independentValue) {
-      contextualInfo = t('enterValueCont')
-    } else if (sending && !recipient.address) {
-      contextualInfo = t('noRecipient')
-    } else if (sending && !isAddress(recipient.address)) {
-      contextualInfo = t('invalidRecipient')
-    } else if (!account) {
-      contextualInfo = t('noWallet')
-      isError = true
-    }
-
-    const slippageWarningText = highSlippageWarning
-      ? t('highSlippageWarning')
-      : slippageWarning
-      ? t('slippageWarning')
-      : ''
-
-    contextualInfo = slippageWarningText ? slippageWarningText : contextualInfo 
-    let allowExpand= !!(
-      !brokenTokenWarning &&
-      inputCurrency &&
-      outputCurrency &&
-      inputValueParsed &&
-      outputValueParsed &&
-      (sending ? recipient.address : true)
-    )
-
-    return (
-      <>
-        {config.dirSwitchFn(inputIsSwitch) && config.dirSwitchFn(outputIsSwitch) ? (
-          <TxnsDtilBtn>
-            <div className={'left' + (isError ? ' red' : '')}>
-              {!allowExpand && contextualInfo ? contextualInfo : (
-                <>
-                <div onClick={() => {
-                  setIsViewTxnsDtil(!isViewTxnsDtil)
-                }}>
-                  {
-                    isViewTxnsDtil ? (
-                      <ColoredDropup></ColoredDropup>
-                    ) : (
-                      <ColoredDropdown></ColoredDropdown>
-                    )
-                  }
-                  {
-                    contextualInfo ? contextualInfo : isViewTxnsDtil ? t('hideDetails') : t('transactionDetails')
-                  }
-                </div>
-                </>
-              )}
-            </div>
-            {/* <div className='slippage'>
-              <img src={AlippageIcon}/>
-              Slippage Warning
-            </div> */}
-          </TxnsDtilBtn>
-        ) : (<div></div>) }
-      </>
-    )
-  }
 
   return (
     <>
@@ -1052,15 +835,6 @@ export default function ExchangePage({ initialCurrency, params }) {
             iconUrl: require('../../assets/images/icon/swap.svg'),
             iconActiveUrl: require('../../assets/images/icon/swap-white.svg')
           }
-          // ,
-          // {
-          //   name: t('send'),
-          //   onTabClick: name => {
-          //     setSending(true)
-          //   },
-          //   iconUrl: require('../../assets/images/icon/send.svg'),
-          //   iconActiveUrl: require('../../assets/images/icon/send-white.svg')
-          // }
         ]}
       ></Title>
       <CurrencyInputPanel
@@ -1101,25 +875,6 @@ export default function ExchangePage({ initialCurrency, params }) {
         value={inputValueFormatted}
         errorMessage={inputError ? inputError : independentField === INPUT ? independentError : ''}
       />
-      <OversizedPanel>
-        {/* <DownArrowBackground>
-          <DownArrow
-            onClick={() => {
-              dispatchSwapState({ type: 'FLIP_INDEPENDENT' })
-            }}
-            clickable
-            alt="swap"
-            active={isValid}
-          >
-          <img src={ResertSvg} />
-          </DownArrow>
-        </DownArrowBackground> */}
-        {/* <DownArrowBackground  onClick={() => {
-          dispatchSwapState({ type: 'FLIP_INDEPENDENT' })
-        }}>
-          <img src={ResertSvg} alt={''} />
-        </DownArrowBackground> */}
-      </OversizedPanel>
       <CurrencyInputPanel
         title={t('output')}
         disableTokenSelect = {true}
@@ -1144,20 +899,7 @@ export default function ExchangePage({ initialCurrency, params }) {
         errorMessage={independentField === OUTPUT ? independentError : ''}
         disableUnlock
       />
-      {sending ? (
-        <>
-          {/* <OversizedPanel>
-            <DownArrowBackground>
-              <DownArrow active={isValid} alt="arrow" />
-            </DownArrowBackground>
-          </OversizedPanel> */}
-          <AddressInputPanel isShowTip={false} onChange={setRecipient} onError={setRecipientError} initialInput={recipient} />
-        </>
-      ) : (
-        ''
-      )}
       <ExchangeRateWrapperBox>
-        {txnsInfoTaggle()}
         <ExchangeRateWrapper
           onClick={() => {
             setInverted(inverted => !inverted)

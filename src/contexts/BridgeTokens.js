@@ -301,6 +301,12 @@ export default {
       [SYMBOL]: 'LINK',
       [DECIMALS]: 18
     },
+    'ZERO': {
+      [NAME]: 'Neumekca Token',
+      [TOKEN]: '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6',
+      [SYMBOL]: 'ZERO',
+      [DECIMALS]: 18
+    },
     'HOT': {
       [NAME]: 'HoloToken',
       [TOKEN]: '0x6c6EE5e31d828De241282B9606C8e98Ea48526E2',

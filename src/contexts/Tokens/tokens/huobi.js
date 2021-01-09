@@ -22,6 +22,25 @@ import {dirSwitch} from '../methods/common'
 
 export default {
   128: {
+    '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6': { // Houbi
+      [NAME]: 'Neumekca Token',
+      [SYMBOL]: 'ZERO',
+      [DECIMALS]: 18,
+      [EXCHANGE_ADDRESS]: '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6',
+      [REDEEM_MAX_NUM]: 0,
+      [REDEEM_MIN_NUM]: 0,
+      [FEE]: 0.001,
+      [MAXFEE]: 0,
+      [MINFEE]: 0,
+      [ISSWITCH]: dirSwitch(0),
+      [ISDEPOSIT]: 0,
+      [ISREDEEM]: 0,
+      [DEPOSIT_ADDRESS]: '',
+      [DEPOSIT_TYPE]: 1,
+      [DEPOSIT_MAX_NUM]: 0,
+      [DEPOSIT_MIN_NUM]: 0,
+      [EXTENDOBJ]: {},
+    },
     '0x538cee985e930557d16c383783ca957fa90b63b3': { // ANY
       [NAME]: 'Anyswap' + config.suffix,
       [SYMBOL]: 'ANY',
@@ -355,6 +374,25 @@ export default {
     },
   },
   256: {
+    '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6': { // Houbi
+      [NAME]: 'Houbi Token',
+      [SYMBOL]: 'HT',
+      [DECIMALS]: 18,
+      [EXCHANGE_ADDRESS]: '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6',
+      [REDEEM_MAX_NUM]: 0,
+      [REDEEM_MIN_NUM]: 0,
+      [FEE]: 0.001,
+      [MAXFEE]: 0,
+      [MINFEE]: 0,
+      [ISSWITCH]: dirSwitch(0),
+      [ISDEPOSIT]: 0,
+      [ISREDEEM]: 0,
+      [DEPOSIT_ADDRESS]: '',
+      [DEPOSIT_TYPE]: 1,
+      [DEPOSIT_MAX_NUM]: 0,
+      [DEPOSIT_MIN_NUM]: 0,
+      [EXTENDOBJ]: {},
+    },
     '0x4373ca233c17b8bf1bf8159d56019d3394a0670d': { // ANY
       [NAME]: 'Anyswap',
       [SYMBOL]: 'ANY',

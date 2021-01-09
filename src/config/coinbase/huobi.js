@@ -91,6 +91,7 @@ const MAIN_CONFIG = {
   noSupportBridge: [
     COIN_BASE.symbol,
     '0x0298c2b32eae4da002a15f36fdf7615bea3da047',
+    '0x522DE80C85B8a736A19e1D073c849EF6a7f055A6',
     '0x66a79d23e58475d2738179ca52cd0b41d73f0bea',
     '0x64ff637fb478863b7468bc97d30a5bf3a428a1fd',
     '0xecb56cf772b5c9a6907fb7d32387da2fcbfb63b4',
