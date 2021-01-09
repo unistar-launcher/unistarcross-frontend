@@ -1,8 +1,8 @@
 {
-  "name": "uniswap",
-  "description": "Anyswap Exchange Protocol",
-  "version": "0.1.0",
-  "homepage": "/",
+  "name": "heconswap-frontend",
+  "description": "HeconSwap Cross-Chain Protocol",
+  "version": "0.1.1",
+  "homepage": "https://github.com/heconswap/heconswap-frontend.git",
   "private": true,
   "dependencies": {
     "@0x/subproviders": "^6.1.1",

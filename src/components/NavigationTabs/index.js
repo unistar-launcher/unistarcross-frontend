@@ -7,8 +7,8 @@ import { Link } from '../../theme/components'
 
 import TelegramIcon from '../../assets/images/icon/telegram.svg'
 import TelegramIconWhite from '../../assets/images/icon/telegram-white.svg'
-import MediumIcon from '../../assets/images/icon/medium.svg'
-import MediumIconWhite from '../../assets/images/icon/medium-white.svg'
+import MediumIcon from '../../assets/images/icon/docs.png'
+import MediumIconWhite from '../../assets/images/icon/docs-white.png'
 import TwitterIcon from '../../assets/images/icon/twitter.svg'
 import TwitterIconWhite from '../../assets/images/icon/twitter-white.svg'
 import GithubIcon from '../../assets/images/icon/github.png'
@@ -22,16 +22,16 @@ const tabOrder = [
   {
     path: '/dashboard',
     textKey: 'dashboard',
-    icon: require('../../assets/images/icon/application.svg'),
-    iconActive: require('../../assets/images/icon/application-purpl.svg'),
+    icon: require('../../assets/images/icon/dashboard.svg'),
+    iconActive: require('../../assets/images/icon/dashboard-white.svg'),
     regex: /\/dashboard/,
     className: '',
   },
   {
     path: '/presale',
     textKey: 'Presale',
-    icon: require('../../assets/images/icon/revert.svg'),
-    iconActive: require('../../assets/images/icon/revert-purpl.svg'),
+    icon: require('../../assets/images/icon/presale.svg'),
+    iconActive: require('../../assets/images/icon/presale-white.svg'),
     regex: /\/presale|\/sale/,
   },
   {
@@ -74,8 +74,8 @@ const tabOrder = [
   {
     path: '/farms',
     textKey: 'farms',
-    icon: require('../../assets/images/icon/send.svg'),
-    iconActive: require('../../assets/images/icon/send-purpl.svg'),
+    icon: require('../../assets/images/icon/farm.svg'),
+    iconActive: require('../../assets/images/icon/farm-purpl.svg'),
     regex: /\/farms/,
   },
 ]
@@ -181,7 +181,7 @@ const StyledNavLink = styled(NavLink).attrs({
     align-items:center;
     img {
       display:block;
-      height: 18px;
+      height: 22px;
       &.show {
         display:none;
       }
@@ -278,7 +278,7 @@ ${({ theme }) => theme.flexRowNoWrap}
       background:none;
       img {
         display:block;
-        height: 18px;
+        height: 22px;
         &.show {
           display:none;
         }
@@ -424,45 +424,45 @@ function NavigationTabs({ location: { pathname }, history }) {
       </Tabs2> */}
       <OutLink>
         <OutLinkImgBox>
-          <Link id="link" href="https://t.me/anyswap">
-            <OutLinkImg onMouseEnter={() => {toggleHover('TelegramIcon')}} onMouseLeave={() => {toggleHover('')}}>
-              {/* <img src={TelegramIcon} /> */}
-              <img alt={''} src={TelegramIconWhite} className={navHover === 'TelegramIcon' ? '' : 'show'}/>
-              <img alt={''} src={TelegramIcon} className={navHover === 'TelegramIcon' ? 'show' : ''}/>
-            </OutLinkImg>
-          </Link>
-          <Link id="link" href="https://medium.com/@anyswap">
+          <Link id="link" href="https://docs.heconswap.org">
             <OutLinkImg onMouseEnter={() => {toggleHover('MediumIcon')}} onMouseLeave={() => {toggleHover('')}}>
               {/* <img src={MediumIcon} /> */}
               <img alt={''} src={MediumIconWhite} className={navHover === 'MediumIcon' ? '' : 'show'}/>
               <img alt={''} src={MediumIcon} className={navHover === 'MediumIcon' ? 'show' : ''}/>
             </OutLinkImg>
           </Link>
-          <Link id="link" href="https://twitter.com/AnyswapNetwork">
+          <Link id="link" href="https://t.me/heconswap">
+            <OutLinkImg onMouseEnter={() => {toggleHover('TelegramIcon')}} onMouseLeave={() => {toggleHover('')}}>
+              {/* <img src={TelegramIcon} /> */}
+              <img alt={''} src={TelegramIconWhite} className={navHover === 'TelegramIcon' ? '' : 'show'}/>
+              <img alt={''} src={TelegramIcon} className={navHover === 'TelegramIcon' ? 'show' : ''}/>
+            </OutLinkImg>
+          </Link>
+          <Link id="link" href="https://twitter.com/heconswap">
             <OutLinkImg onMouseEnter={() => {toggleHover('TwitterIcon')}} onMouseLeave={() => {toggleHover('')}}>
               {/* <img src={TwitterIcon} /> */}
               <img alt={''} src={TwitterIconWhite} className={navHover === 'TwitterIcon' ? '' : 'show'}/>
               <img alt={''} src={TwitterIcon} className={navHover === 'TwitterIcon' ? 'show' : ''}/>
             </OutLinkImg>
           </Link>
-          <Link id="link" href="https://github.com/anyswap">
+          <Link id="link" href="https://github.com/heconswap">
             <OutLinkImg onMouseEnter={() => {toggleHover('GithubIcon')}} onMouseLeave={() => {toggleHover('')}}>
               {/* <img src={CodeIcon} /> */}
               <img alt={''} src={GithubIconWhite} className={navHover === 'GithubIcon' ? '' : 'show'}/>
               <img alt={''} src={GithubIcon} className={navHover === 'GithubIcon' ? 'show' : ''}/>
             </OutLinkImg>
           </Link>
-          <Link id="link" href="https://coinmarketcap.com/exchanges/anyswap">
+          {/* <Link id="link" href="https://coinmarketcap.com/exchanges/anyswap">
             <OutLinkImg onMouseEnter={() => {toggleHover('coinmarketcap')}} onMouseLeave={() => {toggleHover('')}}>
-              {/* <img src={CodeIcon} /> */}
+              {<img src={CodeIcon} />}
               <img alt={''} src={CoinmarketcapIconWhite} className={navHover === 'coinmarketcap' ? '' : 'show'}/>
               <img alt={''} src={CoinmarketcapIcon} className={navHover === 'coinmarketcap' ? 'show' : ''}/>
             </OutLinkImg>
-          </Link>
+          </Link> */}
         </OutLinkImgBox>
         <CopyRightBox>
-          <h5>Powered by <span>Fusion DCRM</span></h5>
-          <p>© 2020 Anyswap. All rights reserved.</p>
+          <h5>Built with ❤ of <span>Elpetron</span></h5>
+          <p>© 2021 Heconswap. All rights reserved.</p>
         </CopyRightBox>
       </OutLink>
     </>

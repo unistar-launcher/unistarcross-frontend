@@ -1,6 +1,4 @@
 import React, { useState, useReducer, useEffect } from 'react'
-// import ReactGA from 'react-ga'
-import { createBrowserHistory } from 'history'
 import { ethers } from 'ethers'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
@@ -21,7 +19,6 @@ import { Button } from '../../theme'
 import AddressInputPanel from '../AddressInputPanel'
 import OversizedPanel from '../OversizedPanel'
 import TransactionDetails from '../TransactionDetails'
-// import ArrowDown from '../../assets/svg/SVGArrowDown'
 import WarningCard from '../WarningCard'
 import config from '../../config'
 
@@ -29,8 +26,6 @@ import {getWeb3ConTract, getWeb3BaseInfo} from '../../utils/web3/txns'
 import EXCHANGE_ABI from '../../constants/abis/exchange'
 
 import HardwareTip from '../HardwareTip'
-
-import ResertSvg from '../../assets/images/icon/revert.svg'
 
 import { ReactComponent as Dropup } from '../../assets/images/dropup-blue.svg'
 import { ReactComponent as Dropdown } from '../../assets/images/dropdown-blue.svg'
@@ -76,15 +71,6 @@ const DownArrowBackground = styled.div`
   background: ${({ theme }) => theme.swapBg}
 `
 
-// const WrappedArrowDown = ({ clickable, active, ...rest }) => <ArrowDown {...rest} />
-// const DownArrow = styled(WrappedArrowDown)`
-//   color: ${({ theme, active }) => (active ? theme.textColorBold : theme.textColorBold)};
-//   width: 0.625rem;
-//   height: 0.625rem;
-//   position: relative;
-//   padding: 0.875rem;
-//   cursor: ${({ clickable }) => clickable && 'pointer'};
-// `
 const DownArrow = styled.div`
   width: 32px;
   height: 32px;
@@ -1056,7 +1042,7 @@ export default function ExchangePage({ initialCurrency, params }) {
         />
       )}
       <Title
-        title={t('swap')}
+        title={t('Presale')}
         tabList={[
           {
             name: t('swap'),
